@@ -3,16 +3,32 @@ import logo from './eyeballer_logo.png';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as tf from '@tensorflow/tfjs';
+import UploadDirectory from './components/UploadDirectory';
+import PresentResults from './components/PresentResults';
+import ClassifyButton from './components/ClassifyButton';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fileContents: "Try uploading a file",
+      classifiedObjects: [],
+      imageObjects: [],
     }
   }
 
+  // func = () => {} will bind the function, similar to `func = this.func.bind(this)`
+  handleFileUpload = (objects) => {
+    this.setState({imageObjects: objects});
+  }
+
+  handleClassification = (objects) => {
+    this.setState({classifiedObjects:objects})
+  }
+
   render() {
+    const classifiedObjects = this.state.classifiedObjects;
+    const imageObjects = this.state.imageObjects;
     return (
       <div className="App">
         <div className="App-header">
@@ -20,8 +36,10 @@ class App extends Component {
           <h2>Eyeballer</h2>
         </div>
         <PredictButton />
+        {/* <ClassifyButton onClassification={this.handleClassification} objects={imageObjects}/> */}
         <ImageFile />
-
+        <UploadDirectory onFileUpload={this.handleFileUpload}/>
+        {classifiedObjects.length > 0 && <PresentResults objects={classifiedObjects}/>}
       </div>
     );
   }
@@ -96,6 +114,7 @@ class PredictButton extends Component {
     const modelUrl = 'jsmodel/model.json';
     const model = await tf.loadLayersModel(modelUrl);
     const offset = tf.scalar(127.5);
+    //get images to process
     const image = tf.browser.fromPixels(document.getElementById('thumbnail'))
       .resizeNearestNeighbor([224,224])
       .toFloat()
