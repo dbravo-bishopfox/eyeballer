@@ -19,22 +19,16 @@ class App extends Component {
 
   // func = () => {} will bind the function, similar to `func = this.func.bind(this)`
   handleFileUpload = (objects) => {
-    // this.setState({imageObjects: objects});
-    this.setState(() => ({
-      imageObjects: objects
-    }));
+    this.setState({imageObjects: objects});
   }
 
   handleClassification = (objects) => {
-    this.setState(() => ({
-      classifiedObjects: objects
-    }));
+    this.setState({classifiedObjects: objects})
   }
 
   render() {
     const classifiedObjects = this.state.classifiedObjects;
     const imageObjects = this.state.imageObjects;
-    console.log("line 32", imageObjects);
     return (
       <div className="App">
         <div className="App-header">
