@@ -19,7 +19,10 @@ class App extends Component {
 
   // func = () => {} will bind the function, similar to `func = this.func.bind(this)`
   handleFileUpload = (objects) => {
-    this.setState({imageObjects: objects});
+    // this.setState({imageObjects: objects});
+    this.setState(() => ({
+      imageObjects: objects
+    }));
   }
 
   handleClassification = (objects) => {
@@ -29,6 +32,7 @@ class App extends Component {
   render() {
     const classifiedObjects = this.state.classifiedObjects;
     const imageObjects = this.state.imageObjects;
+    console.log("line 32", imageObjects);
     return (
       <div className="App">
         <div className="App-header">
@@ -36,10 +40,11 @@ class App extends Component {
           <h2>Eyeballer</h2>
         </div>
         <PredictButton />
-        {/* <ClassifyButton onClassification={this.handleClassification} objects={imageObjects}/> */}
+        <ClassifyButton onClassification={this.handleClassification} objects={imageObjects}/>
         <ImageFile />
         <UploadDirectory onFileUpload={this.handleFileUpload}/>
         {classifiedObjects.length > 0 && <PresentResults objects={classifiedObjects}/>}
+
       </div>
     );
   }
