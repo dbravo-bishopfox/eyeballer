@@ -5,7 +5,7 @@ import * as tf from '@tensorflow/tfjs';
 class UploadDirectory extends React.Component {
     
     handleChange = (e) => {
-        //Upload files && construct imageObjects: [ {tensor: value, imageURI: value}, ... ]
+        //Upload files && prepare object 
         let imageObjects = []
         const files = e.target.files
         for (let nFileId = 0; nFileId < files.length; nFileId++){
@@ -42,5 +42,4 @@ class UploadDirectory extends React.Component {
     }
 
 }
-
 export default UploadDirectory;
