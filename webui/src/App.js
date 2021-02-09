@@ -12,8 +12,8 @@ class App extends Component {
     super(props);
     this.state = {
       fileContents: "Try uploading a file",
-      classifiedObjects: [],
-      imageObjects: [],
+      classifiedObjects: [], // [{imgURI: value, classification: value},...]
+      imageObjects: [], // [{imgURI: value, tensor: value},...]
     }
   }
 
@@ -36,8 +36,8 @@ class App extends Component {
           <h2>Eyeballer</h2>
         </div>
         <PredictButton />
-        {/* <ClassifyButton onClassification={this.handleClassification} objects={imageObjects}/> */}
         <ImageFile />
+        {/* <ClassifyButton onClassification={this.handleClassification} objects={imageObjects}/> */}
         <UploadDirectory onFileUpload={this.handleFileUpload}/>
         {classifiedObjects.length > 0 && <PresentResults objects={classifiedObjects}/>}
       </div>
