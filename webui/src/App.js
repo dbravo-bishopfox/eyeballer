@@ -26,7 +26,9 @@ class App extends Component {
   }
 
   handleClassification = (objects) => {
-    this.setState({classifiedObjects:objects})
+    this.setState(() => ({
+      classifiedObjects: objects
+    }));
   }
 
   render() {
