@@ -21,17 +21,19 @@ class ClassifyButton extends React.Component {
     
             const predictions = Array.from(model.predict(image).dataSync());
             let classification = "";
+            console.log("predictions!",predictions[3]);
             if (predictions[0] > 0.5) {
-            classification += "Custom 404, ";
+                classification += "Custom 404, ";
             }
             if (predictions[1] > 0.5) {
-            classification += "Login Page, ";
+                classification += "Login Page, ";
             }
             if (predictions[2] > 0.5) {
-            classification += "Homepage, ";
+                classification += "Homepage, ";
             }
             if (predictions[3] > 0.5) {
-            classification += "Old Looking ";
+                console.log("predictions!",predictions[3]);
+                classification += "Old Looking ";
             }
             classifiedObjects.push({imageURI: object.imageURI, classification: classification});
         })
