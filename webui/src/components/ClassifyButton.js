@@ -1,6 +1,13 @@
 import React from 'react';
 import * as tf from '@tensorflow/tfjs';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 class ClassifyButton extends React.Component {
+    constructor(props){
+        super(props);
+        this.state={
+            progress : 0
+        }
+    }
     // for each object classify and construct classifiedObject
     // populate classifiedObjects
     onpress = async () => {
@@ -10,7 +17,7 @@ class ClassifyButton extends React.Component {
 
         const objects = this.props.objects;
         let classifiedObjects = [];
-        let counter = 0;
+        
         objects.forEach( (object) => {
             const image = object.tensor
             .resizeNearestNeighbor([224,224])
@@ -40,7 +47,9 @@ class ClassifyButton extends React.Component {
                 // classification += "Old Looking ";
             }
             classifiedObjects.push({imageURI: object.imageURI, classification: classification});
-            counter++;
+            this.setState({progress: this.state.progress + 100/objects.length}, (r) => {
+                setTimeout(r, 2000);
+            })
         })
         this.props.onClassification(classifiedObjects);
     }
@@ -50,7 +59,7 @@ class ClassifyButton extends React.Component {
         return (
             <div className="custom-file">
               <button className="default" type="button" id="predictButton" onClick={this.onpress}>Classify2</button>
-              {/* {classification} */}
+              <ProgressBar animated now={this.state.progress} />
             </div>
           );
     }
