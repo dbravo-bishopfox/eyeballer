@@ -10,7 +10,7 @@ class ClassifyButton extends React.Component {
 
         const objects = this.props.objects;
         let classifiedObjects = [];
-
+        let counter = 0;
         objects.forEach( (object) => {
             const image = object.tensor
             .resizeNearestNeighbor([224,224])
@@ -20,20 +20,27 @@ class ClassifyButton extends React.Component {
             .expandDims();
     
             const predictions = Array.from(model.predict(image).dataSync());
-            let classification = "";
+            let classification = new Set();
+            console.log("predictions!",predictions[3]);
             if (predictions[0] > 0.5) {
-            classification += "Custom 404, ";
+                classification.add("Custom 404");
+                // classification += "Custom 404, ";
             }
             if (predictions[1] > 0.5) {
-            classification += "Login Page, ";
+                classification.add("Login Page");
+                // classification += "Login Page, ";
             }
             if (predictions[2] > 0.5) {
-            classification += "Homepage, ";
+                classification.add("Homepage");
+                // classification += "Homepage, ";
             }
             if (predictions[3] > 0.5) {
-            classification += "Old Looking ";
+                classification.add("Old Looking");
+                // console.log("predictions!",predictions[3]); tensor vs image process produces different result.
+                // classification += "Old Looking ";
             }
             classifiedObjects.push({imageURI: object.imageURI, classification: classification});
+            counter++;
         })
         this.props.onClassification(classifiedObjects);
     }

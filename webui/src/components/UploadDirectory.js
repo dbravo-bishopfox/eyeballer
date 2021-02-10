@@ -42,5 +42,4 @@ class UploadDirectory extends React.Component {
     }
 
 }
-
 export default UploadDirectory;
