@@ -7,16 +7,30 @@ class PresentResults extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            filters : new Set() // ["Custom 404", "Login Page", ...]
+            filters : [] // ["Custom 404", "Login Page", ...]
         }
     }
     render() {
         //Updates the filters when a ToggleButton is clicked
         const handleFilterToggle = (filters) => {
-            this.setState({filters: new Set(filters)})
+            this.setState({filters: filters})
         }
 
         const classifiedObjects = this.props.objects;
+
+        const resultsFilter = (object) => {
+            const currentFilters = this.state.filters; // type []
+            const objectClassifications = object.classification; // type Set
+            if(currentFilters.length == 0){ // No filters => include everything.
+                return true;
+            }
+            //Check if any of the currentFilters are in the classifications of the object. If any are, filterFound = True
+            const filterFound = currentFilters.some( (filter) => {return objectClassifications.has(filter);})
+            if(filterFound){
+                return true; //include the object
+            }
+            return false; //reject the object
+    }
 
         return (
             <Container>
@@ -31,46 +45,12 @@ class PresentResults extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    {/* {classifiedObjects.filter(resultsFilter).map( object => <ImagePreview object={object} /> ) } */}
-                    {classifiedObjects
-                    .filter(object => {
-                        const currentfilters = this.state.filters;
-                        const currentClassification = object.classification;
-                        if(currentfilters.size == 0 || currentfilters.has(currentClassification)){
-                            console.log("TRUE!")
-                            return true;
-                        }
-                        return false;
-                    })
-                    .map( object => {
-                        const img_src = object.imageURI;
-                        return (
-                            <Col sm={3}> 
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Text>
-                                            {object.classification}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    <Card.Img src={img_src} bottom="true"/>
-                                </Card>
-                            </Col>
-                        )}
-                    )}
+                    {classifiedObjects.filter(resultsFilter).map( object => <ImagePreview object={object} />) }
                 </Row>
             </Container>
         )
     }
     
-}
-
-const resultsFilter = (object) => {
-    const currentfilters = this.state.filters;
-    const currentClassification = object.classification;
-    if(currentfilters.has(currentClassification)){
-        return true;
-    }
-    return false;
 }
 
 class ImagePreview extends React.Component{
@@ -84,7 +64,7 @@ class ImagePreview extends React.Component{
                             {object.classification}
                         </Card.Title>
                     </Card.Body>
-                    <Card.Img src={object.imageURI} bottom/>
+                    <Card.Img src={object.imageURI}/>
                 </Card>
             </Col>
         )
