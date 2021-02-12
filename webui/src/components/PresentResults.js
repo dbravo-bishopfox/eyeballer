@@ -12,6 +12,7 @@ class PresentResults extends React.Component {
     }
     render() {
         //Updates the filters when a ToggleButton is clicked
+        //TODO intersection of filters not union.
         const handleFilterToggle = (filters) => {
             this.setState({filters: filters})
         }
@@ -54,6 +55,7 @@ class PresentResults extends React.Component {
 }
 
 class ImagePreview extends React.Component{
+    //TODO allow user to blow up the image to see clearly.
     render() {
         const object = this.props.object;
         return(
