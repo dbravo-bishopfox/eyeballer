@@ -6,6 +6,7 @@ import * as tf from '@tensorflow/tfjs';
 import UploadDirectory from './components/UploadDirectory';
 import PresentResults from './components/PresentResults';
 import ClassifyButton from './components/ClassifyButton';
+import ExportResults from './components/ExportResults';
 
 class App extends Component {
   constructor(props) {
@@ -25,10 +26,14 @@ class App extends Component {
   handleClassification = (objects) => {
     this.setState({classifiedObjects: objects})
   }
+  handleExport = (objects) => {
+    this.setState({export: objects})
+  }
 
   render() {
     const classifiedObjects = this.state.classifiedObjects;
     const imageObjects = this.state.imageObjects;
+
     return (
       <div className="App">
         <div className="App-header">
@@ -39,6 +44,7 @@ class App extends Component {
         <UploadDirectory onFileUpload={this.handleFileUpload}/>
         {classifiedObjects.length > 0 && <PresentResults objects={classifiedObjects}/>}
         {/* Export files (selected) in categories of list. In .txt & (csv-like) file for all results */}
+        <ExportResults  />
       </div>
     );
   }
