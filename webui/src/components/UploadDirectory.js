@@ -9,7 +9,7 @@ class UploadDirectory extends React.Component {
         let imageObjects = []
         const files = e.target.files
         for (let nFileId = 0; nFileId < files.length; nFileId++){
-            const currentImg = new Image();
+            const currentImg = new Image(224,224);
 
             let reader = new FileReader();
             reader.onload = function(){
@@ -27,15 +27,15 @@ class UploadDirectory extends React.Component {
     
     render(){
         return (
-                <label>
-                    Upload a directory
+            <div>
+                <p>Upload a Directory:</p>
                 <input 
                     type="file" 
                     directory="" 
                     webkitdirectory="" 
                     onChange={this.handleChange}
                 />
-                </label>
+            </div>
         )
        
         

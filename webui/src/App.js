@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from './eyeballer_logo.png';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import * as tf from '@tensorflow/tfjs';
 import UploadDirectory from './components/UploadDirectory';
 import PresentResults from './components/PresentResults';
