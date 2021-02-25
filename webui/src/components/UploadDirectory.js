@@ -6,7 +6,7 @@ class UploadDirectory extends React.Component {
     
     handleChange = (e) => {
         //Upload files && prepare object 
-        let imageObjects = []
+        let imageURIs = new Map()
         const files = e.target.files
         for (let nFileId = 0; nFileId < files.length; nFileId++){
             const currentImg = new Image(224,224);
@@ -18,11 +18,11 @@ class UploadDirectory extends React.Component {
 
             reader.readAsDataURL(files[nFileId]);
             currentImg.onload = () => {
-                const tfTensor = tf.browser.fromPixels(currentImg);
-                imageObjects.push({tensor: tfTensor, imageURI: currentImg.src});
+                // const tfTensor = tf.browser.fromPixels(currentImg); Another place to webworker predict and add classification
+                imageURIs.set(nFileId,currentImg);
             }
         }
-        this.props.onFileUpload(imageObjects);
+        this.props.onFileUpload(imageURIs);
     }
     
     render(){

@@ -46,7 +46,7 @@ class PresentResults extends React.Component {
                     </Col>
                 </Row>
                 <Row>
-                    {classifiedObjects.filter(resultsFilter).map( object => <ImagePreview object={object} />) }
+                    {classifiedObjects.filter(resultsFilter).map( (object,index) => <ImagePreview object={object} key={index}/>) }
                 </Row>
             </Container>
         )
