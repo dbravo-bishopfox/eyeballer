@@ -1,12 +1,11 @@
 import React from 'react';
-import * as tf from '@tensorflow/tfjs';
 
-//upload a directory of images and prepare imageObjects with Tensor
+//upload a directory of images
 class UploadDirectory extends React.Component {
     
     handleChange = (e) => {
         //Upload files && prepare object 
-        let imageURIs = new Map()
+        let images = []
         const files = e.target.files
         for (let nFileId = 0; nFileId < files.length; nFileId++){
             const currentImg = new Image(224,224);
@@ -18,11 +17,10 @@ class UploadDirectory extends React.Component {
 
             reader.readAsDataURL(files[nFileId]);
             currentImg.onload = () => {
-                // const tfTensor = tf.browser.fromPixels(currentImg); Another place to webworker predict and add classification
-                imageURIs.set(nFileId,currentImg);
+                images.push(currentImg);
             }
         }
-        this.props.onFileUpload(imageURIs);
+        this.props.onFileUpload(images);
     }
     
     render(){

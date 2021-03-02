@@ -13,13 +13,13 @@ class App extends Component {
     this.state = {
       fileContents: "Try uploading a file",
       classifiedObjects: [],
-      imageURIs: new Map(),
+      images: [],
     }
   }
 
   // func = () => {} will bind the function, similar to `func = this.func.bind(this)`
-  handleFileUpload = (URIs) => {
-    this.setState({imageURIs: URIs});
+  handleFileUpload = (images) => {
+    this.setState({images: images});
   }
 
   handleClassification = (objects) => {
@@ -31,7 +31,7 @@ class App extends Component {
 
   render() {
     const classifiedObjects = this.state.classifiedObjects;
-    const imageURIs = this.state.imageURIs;
+    const images = this.state.images;
 
     return (
       <div className="App">
@@ -39,7 +39,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Eyeballer</h2>
         </div>
-        <ClassifyButton onClassification={this.handleClassification} uris={imageURIs}/>
+        <ClassifyButton onClassification={this.handleClassification} images={images}/>
+        {/* <ClassifyButtonV2 onClassification={this.handleClassification} images={images}/> */}
+        {/* <C3 /> */}
         <UploadDirectory onFileUpload={this.handleFileUpload}/>
         {classifiedObjects.length > 0 && <PresentResults objects={classifiedObjects}/>}
         {/* Export files (selected) in categories of list. In .txt & (csv-like) file for all results */}
