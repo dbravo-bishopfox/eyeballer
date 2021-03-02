@@ -26,17 +26,17 @@ class EyeballModel:
     Contains high-level functions for training, evaluating, and predicting.
     """
     graphs_directory = "graphs/"
-    checkpoint_file = "weights.h5"
+    checkpoint_file = "model.h5"
     image_dir = "images/"
     image_width, image_height = 224, 224
     input_shape = (image_width, image_height, 3)
 
-    def __init__(self, weights_file, print_summary=False, seed=None, quiet=False):
+    def __init__(self, model_file, print_summary=False, seed=None, quiet=False):
         """Constructor for model class.
 
         Keyword arguments:
         print_summary -- Whether or not to print to stdout the keras model summary, containing a detailed description of every model layer
-        weights_file -- A filename for where to load the model's weights.
+        model_file -- A filename for where to load the model's model.
         seed -- PRNG seed, useful for repeating a previous run and using the same data. Training/Validation split is determined randomly.
         """
         # # Build the model
@@ -107,7 +107,7 @@ class EyeballModel:
         self.preprocess_training_function = augmentor.keras_preprocess_func()
 
     def train(self, epochs=20, batch_size=32, print_graphs=False):
-        """Train the model, making a new weights file at each successfull checkpoint. You'll probably need a GPU for this to realistically run.
+        """Train the model, making a new model file at each successfull checkpoint. You'll probably need a GPU for this to realistically run.
 
         Keyword arguments:
         epochs -- The number of epochs to train for. (An epoch is one pass-through of the dataset)
@@ -145,7 +145,7 @@ class EyeballModel:
             seed=self.seed,
             class_mode="other")
 
-        # Model checkpoint - Saves model weights when validation accuracy improves
+        # Model checkpoint - Saves model when validation accuracy improves
         callbacks = [tf.keras.callbacks.ModelCheckpoint(self.checkpoint_file,
                                                         monitor='val_loss',
                                                         verbose=1,

@@ -14,7 +14,34 @@ Eyeballer is meant for large-scope network penetration tests where you need to f
 | ------ |:-----:|
 | ![Sample Homepage](/docs/homepage.png) | ![Sample Custom 404](/docs/404.png) |
 
-## Setup
+## Web UI Setup
+
+Eyeballer's Web UI uses TensorflowJS and React. It runs entirely in your browser locally, with no backend functionality whatsoever. So you can "upload" files to classify and get results without the files ever leaving your computer. To run the Eyeballer Web UI locally, you'll need Node. On Debian, you can install that with the npm package:
+
+```
+sudo apt install npm
+```
+
+Then you'll need to install some Node dependencies:
+
+```
+cd webui/
+npm install
+```
+
+Copy a pre-trained model file (in TensorflowJS format) into a jsmodel/ folder under public/, so that it's available in the web server.
+
+```
+cp YOUR_MODEL/ webui/public/
+```
+
+Then you can run the Web UI with:
+
+```
+npm start
+```
+
+## Python Setup
 
 Download required packages on pip:
 ```
@@ -44,13 +71,13 @@ Copy all three into the root of the Eyeballer code tree.
 To eyeball some screenshots, just run the "predict" mode:
 
 ```
-eyeballer.py --weights YOUR_WEIGHTS.h5 predict YOUR_FILE.png
+eyeballer.py --model YOUR_MODEL.h5 predict YOUR_FILE.png
 ```
 
 Or for a whole directory of files:
 
 ```
-eyeballer.py --weights YOUR_WEIGHTS.h5 predict PATH_TO/YOUR_FILES/
+eyeballer.py --model YOUR_MODEL.h5 predict PATH_TO/YOUR_FILES/
 ```
 
 Eyeballer will spit the results back to you in human readable format (a `results.html` file so you can browse it easily) and machine readable format (a `results.csv` file).
@@ -64,14 +91,14 @@ eyeballer.py train
 
 You'll want a machine with a good GPU for this to run in a reasonable amount of time. Setting that up is outside the scope of this readme, however.
 
-This will output a new model file (weights.h5 by default).
+This will output a new model file (model.h5 by default).
 
 ## Evaluation
 
 You just trained a new model, cool! Let's see how well it performs against some images it's never seen before, across a variety of metrics:
 
 ```
-eyeballer.py --weights YOUR_WEIGHTS.h5 evaluate
+eyeballer.py --model YOUR_MODEL.h5 evaluate
 ```
 
 The output will describe the model's accuracy in both recall and precision for each of the program's labels. (Including "none of the above" as a pseudo-label)
