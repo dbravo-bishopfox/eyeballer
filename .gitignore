@@ -123,3 +123,4 @@ results.html
 
 #Leave the webui things alone for their own gitignore
 !webui/*
+logs/*

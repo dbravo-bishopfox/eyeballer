@@ -61,7 +61,10 @@ class EyeballModel:
             print(self.model.summary())
 
         self.quiet = quiet
+        self.seed = seed
+        self.weights_file = weights_file
 
+    def _init_labels(self):
         # Pull out our labels for use in generators later
         data = pd.read_csv("labels.csv")
         self.training_labels = data.loc[data['evaluation'] == False]  # noqa: E712
@@ -69,7 +72,6 @@ class EyeballModel:
 
         # Shuffle the training labels
         self.random_seed = False
-        self.seed = seed
         if self.seed is None:
             self.random_seed = True
             self.seed = random.randint(0, 999999)
@@ -78,15 +80,15 @@ class EyeballModel:
         random.seed(self.seed)
         self.training_labels = self.training_labels.sample(frac=1)
 
-        if model_file is not None and os.path.isfile(model_file):
+        if self.weights_file is not None and os.path.isfile(self.weights_file):
             try:
-                self.model = tf.keras.models.load_model(model_file)
+                self.model.load_weights(self.weights_file)
             except OSError:
-                print("ERROR: Unable to open model file '{}'".format(model_file))
+                print("ERROR: Unable to open weights file '{}'".foramt(self.weights_file))
                 sys.exit(-1)
             print("Loaded model from file.")
         else:
-            if model_file is not None:
+            if self.weights_file is not None:
                 raise FileNotFoundError
             print("WARN: No model loaded from file. Generating random model")
 
@@ -114,6 +116,7 @@ class EyeballModel:
         """
         print("Training with seed: " + str(self.seed))
 
+        self._init_labels()
         data_generator = tf.keras.preprocessing.image.ImageDataGenerator(
             preprocessing_function=self.preprocess_training_function,
             validation_split=0.2,
@@ -144,11 +147,20 @@ class EyeballModel:
 
         # Model checkpoint - Saves model when validation accuracy improves
         callbacks = [tf.keras.callbacks.ModelCheckpoint(self.checkpoint_file,
-                     monitor='val_loss',
-                     verbose=1,
-                     save_best_only=True,
-                     save_weights_only=False,
-                     mode='min')]
+                                                        monitor='val_loss',
+                                                        verbose=1,
+                                                        save_best_only=True,
+                                                        save_weights_only=True,
+                                                        mode='min'),
+                     tf.keras.callbacks.TensorBoard(log_dir='logs',
+                                                    histogram_freq=2,
+                                                    write_graph=True,
+                                                    write_images=False,
+                                                    update_freq='epoch',
+                                                    profile_batch=2,
+                                                    embeddings_freq=0,
+                                                    embeddings_metadata=None),
+                     ]
 
         history = self.model.fit_generator(
             training_generator,
@@ -253,6 +265,7 @@ class EyeballModel:
         threshold -- Value between 0->1. The cutoff where the numerical prediction becomes boolean. Default: 0.5
         """
         # Prepare the data
+        self._init_labels()
         data_generator = tf.keras.preprocessing.image.ImageDataGenerator(
             preprocessing_function=preprocess_input)
         evaluation_generator = data_generator.flow_from_dataframe(
