@@ -16,13 +16,13 @@ class ClassifyButton extends React.Component {
   }
 
   onpress = async () => {
-    this.setState( () => ({ progress: 1 }));
+    this.setState(() => ({ progress: 1 }));
     const model = this.state.model;
     const offset = tf.scalar(127.5);
-    const images = this.props.images; 
+    const images = this.props.images;
     let classifiedObjects = [];
 
-    for(let img of images){
+    for (let img of images) {
       const tfTensor = tf.browser
         .fromPixels(img)
         .resizeNearestNeighbor([224, 224])
@@ -46,13 +46,14 @@ class ClassifyButton extends React.Component {
       if (predictions[3] > 0.5) {
         classification.add("Old Looking");
       }
-      console.log("Classification ", Array.from(classification).toString())
+      console.log("Classification ", Array.from(classification).toString());
       classifiedObjects.push({
         imageURI: img.src,
         classification: classification,
+        fileName: img.alt,
       });
     }
-    this.setState( () => ({progress: 2}));
+    this.setState(() => ({ progress: 2 }));
     this.props.onClassification(classifiedObjects);
   };
 
