@@ -1,5 +1,5 @@
 import React from "react";
-import { CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import Dropdown from "react-bootstrap/Dropdown";
 //https://www.npmjs.com/package/react-csv
 //https://dev.to/imjoshellis/simple-download-text-file-link-with-react-29j3
@@ -8,18 +8,11 @@ class ExportResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      possibleClassifications: ["custom404", "login", "homepage", "oldlooking"],
-      downloadData: [],
+      possibleClassifications: ["filename","Custom 404", "Login Page", "Homepage", "Old Looking"],
+      downloadInitialized: false,
+      data: []
     };
   }
-
-  filterItems = (arr, filters) => {
-    if (filters && filters.length > 0) {
-      return arr.filter(this.props.filterMethod);
-    } else {
-      return arr;
-    }
-  };
 
   classificationCSV = (classifications) => {
     let result = [];
@@ -33,49 +26,36 @@ class ExportResults extends React.Component {
     return result;
   };
 
-  exportCSVData = (filters) => {
+  exportCSVData2 = () => {
     let csvData = [this.state.possibleClassifications]; //Set Header
-    let filteredObjects = this.filterItems(this.props.objects, filters);
-    csvData.push(
-      filteredObjects.map((object) => {
-        //custom thing to determine which classification is true
-        const filename = object.filename;
-        const classifications = this.classificationCSV(object.classification);
-        return classifications.unshift(filename); // ["filename","true","false","false"]
-      })
-    );
-    this.setState({ downloadDate: csvData });
+    let selectedObjects = this.props.selectedObjects;
+    selectedObjects.map((object) => {
+      //custom thing to determine which classification is true
+      const filename = object.fileName;
+      const classifications = this.classificationCSV(object.classification);
+      classifications.unshift(filename); // ["filename","true","false","false",..]
+      csvData.push(classifications)
+    });
+    this.setState({ data: csvData, downloadInitialized: true});
+  }
+
+  exportCSVData = () => {
+    let csvData = [this.state.possibleClassifications]; //Set Header
+    let selectedObjects = this.props.selectedObjects;
+    selectedObjects.map((object) => {
+      console.log(object.fileName);
+      //custom thing to determine which classification is true
+      const filename = object.fileName;
+      const classifications = this.classificationCSV(object.classification);
+      classifications.unshift(filename); // ["filename","true","false","false",..]
+      csvData.push(classifications)
+    });
+    console.log(csvData)
+    this.setState({ data: csvData, downloadInitialized: true });
   };
 
-  //take in the filters, dont take the filtered objects to avoid having more imforation in the dom
-
-  // exportCSVData = (actionId) => {
-  //   let csvData = [this.props.possibleClassifications]; //Set Header
-  //   const objects = this.props.objects;
-  //   switch (actionId) {
-  //     //export_all
-  //     case 0:
-  //       csvData.push(
-  //         objects.map((object) => {
-  //           //custom thing to determine which classification is true
-  //           const filename = object.filename;
-  //           const classifications = this.classificationCSV(object.classification);
-  //           return classifications.unshift(filename); // ["filename","true","false","false"]
-  //         })
-  //       );
-  //     //export_selection_csv
-  //     case 1:
-
-  //   }
-  //   return csvData
-  // };
-  DownloadData = ({ data }) => {
-    this.setState({ downloadData: [] });
-    return <CSVDownload data={data} />;
-  };
 
   render() {
-    const filters = this.props.filters;
     return (
       <>
         <Dropdown>
@@ -83,17 +63,17 @@ class ExportResults extends React.Component {
             Export
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item onClick={this.exportCSVData(null)}>
-              Export All to CSV
-            </Dropdown.Item>
-            <Dropdown.Item onClick={this.exportCSVData(filters)}>
-              Export Selection to CSV
-            </Dropdown.Item>
+              <CSVLink
+                data={this.state.data}
+                filename={"eyeballer.csv"}
+                className="btn btn-primary"
+                target="_blank"
+                onClick={this.exportCSVData2}
+              >
+                Download me
+              </CSVLink>
           </Dropdown.Menu>
         </Dropdown>
-        {this.state.downloadData && (
-          <DownloadData data={this.state.downloadData} />
-        )}
       </>
     );
   }
