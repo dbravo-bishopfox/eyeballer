@@ -42,16 +42,10 @@ class PresentResults extends React.Component {
   render() {
     const classifiedObjects = this.props.objects;
     // const filters = this.state.filters;
-    let selectedObjects = classifiedObjects.filter(this.resultsFilter)
+    let selectedObjects = classifiedObjects.filter(this.resultsFilter);
     return (
       <>
-        {/* <ExportResults
-          // objects={classifiedObjects}
-          // filters={filters}
-          // filterMethod={this.resultsFilter}
-          //objects={selectedObjects}
-        /> */}
-        <ExportResults selectedObjects={selectedObjects}/>
+        <ExportResults selectedObjects={selectedObjects} />
         <Container>
           <Row>
             <Col>
@@ -67,11 +61,6 @@ class PresentResults extends React.Component {
             </Col>
           </Row>
           <Row>
-            {/* {classifiedObjects
-              .filter(this.resultsFilter)
-              .map((object, index) => (
-                <ImagePreview object={object} key={index} />
-              ))} */}
             {selectedObjects.map((object, index) => (
               <ImagePreview object={object} key={index} />
             ))}

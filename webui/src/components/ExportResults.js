@@ -8,9 +8,14 @@ class ExportResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      possibleClassifications: ["filename","Custom 404", "Login Page", "Homepage", "Old Looking"],
+      possibleClassifications: [
+        "Custom 404",
+        "Login Page",
+        "Homepage",
+        "Old Looking",
+      ],
       downloadInitialized: false,
-      data: []
+      data: [],
     };
   }
 
@@ -27,17 +32,17 @@ class ExportResults extends React.Component {
   };
 
   exportCSVData2 = () => {
-    let csvData = [this.state.possibleClassifications]; //Set Header
+    let csvData = ["filename", this.state.possibleClassifications]; //Set Header
     let selectedObjects = this.props.selectedObjects;
     selectedObjects.map((object) => {
       //custom thing to determine which classification is true
       const filename = object.fileName;
       const classifications = this.classificationCSV(object.classification);
       classifications.unshift(filename); // ["filename","true","false","false",..]
-      csvData.push(classifications)
+      csvData.push(classifications);
     });
-    this.setState({ data: csvData, downloadInitialized: true});
-  }
+    this.setState({ data: csvData, downloadInitialized: true });
+  };
 
   exportCSVData = () => {
     let csvData = [this.state.possibleClassifications]; //Set Header
@@ -48,12 +53,11 @@ class ExportResults extends React.Component {
       const filename = object.fileName;
       const classifications = this.classificationCSV(object.classification);
       classifications.unshift(filename); // ["filename","true","false","false",..]
-      csvData.push(classifications)
+      csvData.push(classifications);
     });
-    console.log(csvData)
+    console.log(csvData);
     this.setState({ data: csvData, downloadInitialized: true });
   };
-
 
   render() {
     return (
@@ -63,15 +67,15 @@ class ExportResults extends React.Component {
             Export
           </Dropdown.Toggle>
           <Dropdown.Menu>
-              <CSVLink
-                data={this.state.data}
-                filename={"eyeballer.csv"}
-                className="btn btn-primary"
-                target="_blank"
-                onClick={this.exportCSVData2}
-              >
-                Download me
-              </CSVLink>
+            <CSVLink
+              data={this.state.data}
+              filename={"eyeballer.csv"}
+              className="btn btn-primary"
+              target="_blank"
+              onClick={this.exportCSVData2}
+            >
+              Download me
+            </CSVLink>
           </Dropdown.Menu>
         </Dropdown>
       </>
