@@ -30,7 +30,7 @@
 //       .toFloat()
 //       .sub(offset)
 //       .div(offset)
-//       .expandDims() 
+//       .expandDims()
 //       const classificationPromise = await predictionAPI.predict(tfTensorData.arraySync()).then(() => {
 //         tfTensorData.dispose()
 //         classifiedObjects.push({
@@ -38,8 +38,8 @@
 //           classification: classification,
 //         });
 //       });
-      
-//     }    
+
+//     }
 //   };
 
 //   render() {
@@ -61,6 +61,4 @@
 //   }
 // }
 
-
 // // export default c2;
-
