@@ -25,10 +25,10 @@ class PresentResults extends React.Component {
       // No filters => include everything.
       return true;
     }
-    //Check if any of the currentFilters are in the classifications of the object. If any are, filterFound = True
-    const filterFound = currentFilters.some((filter) => {
+    //Check if all the currentFilters are in the classifications of the object. If all are, filterFound = True
+    const filterFound = currentFilters.every((filter) => {
       return objectClassifications.has(filter);
-    });
+    })
     if (filterFound) {
       return true; //include the object
     }
