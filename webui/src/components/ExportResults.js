@@ -31,31 +31,17 @@ class ExportResults extends React.Component {
     return result;
   };
 
-  exportCSVData2 = () => {
-    let csvData = ["filename", this.state.possibleClassifications]; //Set Header
-    let selectedObjects = this.props.selectedObjects;
-    selectedObjects.map((object) => {
-      //custom thing to determine which classification is true
-      const filename = object.fileName;
-      const classifications = this.classificationCSV(object.classification);
-      classifications.unshift(filename); // ["filename","true","false","false",..]
-      csvData.push(classifications);
-    });
-    this.setState({ data: csvData, downloadInitialized: true });
-  };
-
   exportCSVData = () => {
     let csvData = [this.state.possibleClassifications]; //Set Header
     let selectedObjects = this.props.selectedObjects;
     selectedObjects.map((object) => {
-      console.log(object.fileName);
       //custom thing to determine which classification is true
       const filename = object.fileName;
       const classifications = this.classificationCSV(object.classification);
       classifications.unshift(filename); // ["filename","true","false","false",..]
       csvData.push(classifications);
     });
-    console.log(csvData);
+    csvData[0].unshift("filename")//add filename header for formatting
     this.setState({ data: csvData, downloadInitialized: true });
   };
 
@@ -72,7 +58,7 @@ class ExportResults extends React.Component {
               filename={"eyeballer.csv"}
               className="btn btn-primary"
               target="_blank"
-              onClick={this.exportCSVData2}
+              onClick={this.exportCSVData}
             >
               Download me
             </CSVLink>

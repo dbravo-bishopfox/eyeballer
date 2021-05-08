@@ -21,7 +21,7 @@ class ClassifyButton extends React.Component {
     const offset = tf.scalar(127.5);
     const images = this.props.images;
     let classifiedObjects = [];
-
+    let i = 0;
     for (let img of images) {
       const tfTensor = tf.browser
         .fromPixels(img)
@@ -46,7 +46,7 @@ class ClassifyButton extends React.Component {
       if (predictions[3] > 0.5) {
         classification.add("Old Looking");
       }
-      console.log("Classification ", Array.from(classification).toString());
+      console.log(i++);
       classifiedObjects.push({
         imageURI: img.src,
         classification: classification,
